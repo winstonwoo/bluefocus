@@ -93,8 +93,8 @@ int sub_main()
 
     if(psdata != 0xff)
 	{
-    sprintf(cmdStr, "kill %d", psdata+1) ;
-
+    sprintf(cmdStr, "kill -13  %d ", psdata+1) ;
+    myprintf(cmdStr) ;
     myprintf("$$$ths cmd %s\n", cmdStr) ;
     system(cmdStr) ;
      }
@@ -129,7 +129,7 @@ int main(){
          sub_main() ;
 	 if(fork() == 0){
          myprintf("I'm the child process. \n") ;
-         status = system("omxplayer -o hdmi mus.mp4") ;  
+         status = system("omxplayer -o hdmi mus.mp4 >trash") ;  
          exit(0) ;
          }
          //status = system("omxplayer -o hdmi mus.mp4") ;  
@@ -138,7 +138,7 @@ int main(){
         sub_main() ;
     	if(fork() == 0){
          myprintf("I'm the child process. \n") ;
-         status = system("omxplayer -o hdmi pho.mp4") ;  
+         status = system("omxplayer -o hdmi pho.mp4 > trash") ;  
          exit(0) ;
          }       
         // status = system("omxplayer -o hdmi pho.mp4") ;  
@@ -148,7 +148,7 @@ int main(){
         sub_main() ;
   	if(fork() == 0){
          myprintf("I'm the child process. \n") ;
-         status = system("omxplayer -o hdmi sig.mp4") ;  
+         status = system("omxplayer -o hdmi sig.mp4 > trash") ;  
          exit(0) ;
          } 
          //status = system("omxplayer -o hdmi sig.mp4") ;  
@@ -158,7 +158,7 @@ int main(){
         sub_main() ;	
 	if(fork() == 0){
          myprintf("I'm the child process. \n") ;
-         status = system("omxplayer -o hdmi xos.mp4") ;  
+         status = system("omxplayer -o hdmi xos.mp4 > trash") ;  
          exit(0) ;
          }
          //status = system("omxplayer -o hdmi xos.mp4") ;  
@@ -180,7 +180,7 @@ int main(){
     }
 #endif
     ioctl(fd, CMD_BEGIN, 0xaa);
-    sleep(2) ;
+    usleep(500) ;
   }
   
   close(fd) ;

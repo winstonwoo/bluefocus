@@ -14,3 +14,5 @@
 3. the app can be complied on raspberry with below command
    
    gcc -g triggerApp.c -o triggerApp
+4. mask the message from shell command of kill
+   kill -13  $PID 	
