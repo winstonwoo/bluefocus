@@ -108,6 +108,13 @@ int main(){
   
   char val = 0 ;
   int status ;
+  
+  if(fork() == 0){
+         myprintf("I'm the child process. \n") ;
+         status = system("fbi -noverbose -T 2 mypic.jpg ") ;  
+         exit(0) ;
+         }
+  
   fd = open("/dev/trigger", O_RDWR);
 
   if(fd<0){

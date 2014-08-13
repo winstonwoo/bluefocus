@@ -16,3 +16,7 @@
    gcc -g triggerApp.c -o triggerApp
 4. mask the message from shell command of kill
    kill -13  $PID 	
+
+5. Add the front ground picture display to mask the imformation of command line
+   fbi -noverbose -T 2 mypic.jpg 
+
