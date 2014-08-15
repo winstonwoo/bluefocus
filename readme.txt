@@ -19,4 +19,6 @@
 
 5. Add the front ground picture display to mask the imformation of command line
    fbi -noverbose -T 2 mypic.jpg 
-
+6. port to Raspberry B+ board with linux 3.12.22+ kernel
+   key point : the linux 3.12.y should be recompiled.
+   others remain.  

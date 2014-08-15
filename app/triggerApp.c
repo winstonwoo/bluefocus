@@ -8,9 +8,15 @@
 #include <sys/wait.h>
 
 #define CMD_BEGIN 0xab
+<<<<<<< HEAD
 #define LENGTH  500
 
 //#define MY_LOG
+=======
+#define LENGTH 500
+
+#define MY_LOG
+>>>>>>> 2b47014682dc918264a0671eac692b082b1bf03d
 #ifdef MY_LOG
 #define myprintf printf
 #else
@@ -24,6 +30,7 @@ int pidkill = 0xff ;
 	int *
 change (char *strg)
 {
+<<<<<<< HEAD
 	int n, i, j;
 	int *number;
 	n = i = j = 0;
@@ -53,6 +60,34 @@ change (char *strg)
         count = n ;	
 	myprintf("###########pidkill = %d ++++\n", pidkill);        
 	return number;
+=======
+  int n, i, j;
+  int *number;
+  n = i = j = 0;
+
+  while (strg[i])
+    {
+      for (; strg[i] && strg[i] == ' '; ++i);
+      for (j = i + 1; strg[j] && strg[j] != ' '; ++j);
+      i = j;
+      ++n;
+    }
+
+  number = (int *) malloc (sizeof (int) * (n + 1));
+  psdata = 0xff;
+  n = i = j = 0;
+  while (strg[i])
+    {
+      for (; strg[i] && strg[i] == ' '; ++i);
+      for (j = i + 1; strg[j] && strg[j] != ' '; ++j);
+      number[++n] = atoi (strg + i);
+      psdata = number[n];
+      myprintf ("!!!!!0x%x ####%d\n", number[n], n);
+      i = j;
+    }
+  number[0] = n;
+  return number;
+>>>>>>> 2b47014682dc918264a0671eac692b082b1bf03d
 }
 
 	int
