@@ -4,7 +4,7 @@ MODULE=trigger
 # this two variables, depends where you have you raspberry kernel source and tools installed
 
 CCPREFIX=/winston/raspberry/tools-master/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-
-KERNEL_SRC=/winston/raspberry/linux-rpi-3.2.27
+KERNEL_SRC= /usr/src/linux-rpi-3.12.y 
 
 
 obj-m += ${MODULE}.o
