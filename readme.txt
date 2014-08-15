@@ -21,4 +21,6 @@
    fbi -noverbose -T 2 mypic.jpg 
 6. port to Raspberry B+ board with linux 3.12.22+ kernel
    key point : the linux 3.12.y should be recompiled.
+7. For the B+ linux3.12.22+ the oxmplayer pid isn't followed the program pid.
+   for all pid should be find and kill the oxmplayer pid correctly.
    others remain.  

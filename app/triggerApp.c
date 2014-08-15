@@ -8,15 +8,10 @@
 #include <sys/wait.h>
 
 #define CMD_BEGIN 0xab
-<<<<<<< HEAD
 #define LENGTH  500
 
 //#define MY_LOG
-=======
-#define LENGTH 500
 
-#define MY_LOG
->>>>>>> 2b47014682dc918264a0671eac692b082b1bf03d
 #ifdef MY_LOG
 #define myprintf printf
 #else
@@ -25,16 +20,16 @@
 
 int psdata[10] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 int count = 0xff ;
-int pidkill = 0xff ;
+int pidkill = 0xff ;  //store the pid which should be kill for omxplayer
 //count the number in one string line and convert them to int 
 	int *
 change (char *strg)
 {
-<<<<<<< HEAD
 	int n, i, j;
 	int *number;
 	n = i = j = 0;
 
+	//Count the total number amount
 	while (strg[i])
 	{
 		for (; strg[i] && strg[i] == ' '; ++i);
@@ -45,7 +40,9 @@ change (char *strg)
 
 	number = (int *) malloc (sizeof (int) * (n + 1));
 	n = i = j = 0;
-        count = 0 ;	
+	count = 0 ;	
+
+	//Convert the number string to int number
 	while (strg[i])
 	{
 		for (; strg[i] && strg[i] == ' '; ++i);
@@ -53,41 +50,13 @@ change (char *strg)
 		number[++n] = atoi (strg + i);
 		psdata[n] = number[n];
 		myprintf ("!!!!!0x%x ####%d\n", number[n], n);
-                i = j;
+		i = j;
 	}
-        pidkill = psdata[n-1] ;
- 	number[0] = n;
-        count = n ;	
+	pidkill = psdata[n-1] ;
+	number[0] = n;
+	count = n ;	
 	myprintf("###########pidkill = %d ++++\n", pidkill);        
 	return number;
-=======
-  int n, i, j;
-  int *number;
-  n = i = j = 0;
-
-  while (strg[i])
-    {
-      for (; strg[i] && strg[i] == ' '; ++i);
-      for (j = i + 1; strg[j] && strg[j] != ' '; ++j);
-      i = j;
-      ++n;
-    }
-
-  number = (int *) malloc (sizeof (int) * (n + 1));
-  psdata = 0xff;
-  n = i = j = 0;
-  while (strg[i])
-    {
-      for (; strg[i] && strg[i] == ' '; ++i);
-      for (j = i + 1; strg[j] && strg[j] != ' '; ++j);
-      number[++n] = atoi (strg + i);
-      psdata = number[n];
-      myprintf ("!!!!!0x%x ####%d\n", number[n], n);
-      i = j;
-    }
-  number[0] = n;
-  return number;
->>>>>>> 2b47014682dc918264a0671eac692b082b1bf03d
 }
 
 	int
@@ -135,8 +104,8 @@ sub_main ()
 	pid_t status;
 	int errno = 0;
 	char cmdStr[20];
-        int i ;
- 
+	int i ;
+
 	status = system ("pgrep omxplayer > system.dat");
 
 	system_data ();
@@ -157,8 +126,8 @@ sub_main ()
 	else
 		myprintf ("cp exit illegal![%d]/n", errno);
 
-        //only kill the last PID for whole program operating
-        myprintf("!!!!!!!!!!%d!! %d!!!\n", count, pidkill) ;
+	//only kill the last PID for whole program operating
+	myprintf("!!!!!!!!!!%d!! %d!!!\n", count, pidkill) ;
 	if(count != 0) 
 	{
 		sprintf (cmdStr, "kill -13  %d ", pidkill);
@@ -166,7 +135,7 @@ sub_main ()
 		myprintf ("$$$ths cmd %s\n", cmdStr);
 		system (cmdStr);
 	}
-        myprintf("^^^^^^^^^^^^^^^^^^^\n") ;
+	myprintf("^^^^^^^^^^^^^^^^^^^\n") ;
 }
 
 
