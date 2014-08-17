@@ -8,8 +8,9 @@
 #include <sys/wait.h>
 
 #define CMD_BEGIN 0xab
-#define LENGTH 30
+#define LENGTH 500
 
+#define MY_LOG
 #ifdef MY_LOG
 #define myprintf printf
 #else
@@ -24,6 +25,7 @@ change (char *strg)
   int n, i, j;
   int *number;
   n = i = j = 0;
+
   while (strg[i])
     {
       for (; strg[i] && strg[i] == ' '; ++i);
