@@ -6,6 +6,8 @@
 #include <linux/cdev.h>
 #include <linux/ioctl.h>
 #include <linux/fs.h>
+#include <linux/unistd.h>
+#include <linux/delay.h>
 
 #include <linux/interrupt.h>
 #include <linux/gpio.h>
@@ -87,7 +89,7 @@ static irqreturn_t r_irq_handler(int irq, void *dev_id, struct pt_regs *regs) {
 
    // disable hard interrupts (remember them in flag 'flags')
    local_irq_save(flags);
-
+   mdelay(100) ;
    gpioLevel = gpio_get_value(GPIO_ANY_GPIO) ;
    printk(KERN_NOTICE"gpio 17 !!!!level = 0x%x \n", gpioLevel) ; 
    if(gpioLevel == 0x1) 
@@ -121,6 +123,7 @@ static irqreturn_t r_irq18_handler(int irq, void *dev_id, struct pt_regs *regs) 
    // disable hard interrupts (remember them in flag 'flags')
    local_irq_save(flags);
 
+   mdelay(100) ;
    gpioLevel = gpio_get_value(GPIO_18_GPIO) ;
    printk(KERN_NOTICE"gpio 18 !!!!level = 0x%x \n", gpioLevel) ; 
    if(gpioLevel == 0x1) 
@@ -154,6 +157,7 @@ static irqreturn_t r_irq22_handler(int irq, void *dev_id, struct pt_regs *regs) 
    // disable hard interrupts (remember them in flag 'flags')
    local_irq_save(flags);
 
+   mdelay(100) ;
    gpioLevel = gpio_get_value(GPIO_22_GPIO) ;
    printk(KERN_NOTICE"gpio 22 !!!!level = 0x%x \n", gpioLevel) ; 
    if(gpioLevel == 0x1) 
@@ -188,6 +192,7 @@ static irqreturn_t r_irq23_handler(int irq, void *dev_id, struct pt_regs *regs) 
    local_irq_save(flags);
 
 
+   mdelay(100) ;
    gpioLevel = gpio_get_value(GPIO_23_GPIO) ;
    printk(KERN_NOTICE"gpio 23 !!!!level = 0x%x \n", gpioLevel) ; 
    if(gpioLevel == 0x1) 

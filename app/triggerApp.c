@@ -18,9 +18,11 @@
 #define myprintf
 #endif
 
-int psdata[10] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-int count = 0xff ;
-int pidkill = 0xff ;  //store the pid which should be kill for omxplayer
+int psdata[10] =
+{ 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+int count = 0xff;
+int pidkill = 0xff;		//store the pid which should be kill for omxplayer
+int pidkill_b = 0x0;
 //count the number in one string line and convert them to int 
 	int *
 change (char *strg)
@@ -40,7 +42,7 @@ change (char *strg)
 
 	number = (int *) malloc (sizeof (int) * (n + 1));
 	n = i = j = 0;
-	count = 0 ;	
+	count = 0;
 
 	//Convert the number string to int number
 	while (strg[i])
@@ -52,10 +54,10 @@ change (char *strg)
 		myprintf ("!!!!!0x%x ####%d\n", number[n], n);
 		i = j;
 	}
-	pidkill = psdata[n-1] ;
+	pidkill = psdata[n - 1];
 	number[0] = n;
-	count = n ;	
-	myprintf("###########pidkill = %d ++++\n", pidkill);        
+	count = n;
+	myprintf ("###########pidkill = %d ++++\n", pidkill);
 	return number;
 }
 
@@ -67,7 +69,7 @@ system_data (void)
 	char str[LENGTH];
 	int num[5];
 	int *p;
-	int i ;
+	int i;
 	p = &num[0];
 
 
@@ -81,14 +83,14 @@ system_data (void)
 
 	myprintf ("wttwtt!@ %s @wttwtt\n", str);
 	myprintf ("wttwtt!@ 0x%x @wttwtt\n", str);
-#if 1
+#if 0				//work for B+ linux 3.12.22+
 	//Replace the '\r' and '\n' with ' ' for number counting. 
-	i=0 ;
-	while(i<LENGTH)
+	i = 0;
+	while (i < LENGTH)
 	{
-		if((str[i] == '\n') || (str[i] == '\r'))
-			str[i] = ' ' ;
-		i++ ;
+		if ((str[i] == '\n') || (str[i] == '\r'))
+			str[i] = ' ';
+		i++;
 
 	}
 #endif
@@ -104,8 +106,9 @@ sub_main ()
 	pid_t status;
 	int errno = 0;
 	char cmdStr[20];
-	int i ;
+	int i;
 
+	pidkill = 0x0;
 	status = system ("pgrep omxplayer > system.dat");
 
 	system_data ();
@@ -127,15 +130,17 @@ sub_main ()
 		myprintf ("cp exit illegal![%d]/n", errno);
 
 	//only kill the last PID for whole program operating
-	myprintf("!!!!!!!!!!%d!! %d!!!\n", count, pidkill) ;
-	if(count != 0) 
+	myprintf ("!!!!!!!!!!%d!! %d!!!\n", count, pidkill);
+
+	if (psdata[count] != 0xff)	//if(pidkill) 
 	{
-		sprintf (cmdStr, "kill -13  %d ", pidkill);
+		//              sprintf (cmdStr, "kill -13  %d ", pidkill);
+		sprintf (cmdStr, "kill -13  %d ", psdata[count] + 1);
 		myprintf (cmdStr);
 		myprintf ("$$$ths cmd %s\n", cmdStr);
 		system (cmdStr);
 	}
-	myprintf("^^^^^^^^^^^^^^^^^^^\n") ;
+	myprintf ("^^^^^^^^^^^^^^^^^^^\n");
 }
 
 
