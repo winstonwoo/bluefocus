@@ -24,3 +24,5 @@
 7. For the B+ linux3.12.22+ the oxmplayer pid isn't followed the program pid.
    for all pid should be find and kill the oxmplayer pid correctly.
    others remain.  
+
+8. Add the gpio_get_value in IRQ function to confirm the gpio trigger source for debounce

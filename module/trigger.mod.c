@@ -26,7 +26,9 @@ __attribute__((section("__versions"))) = {
 	{ 0xfe990052, __VMLINUX_SYMBOL_STR(gpio_free) },
 	{ 0xf20dabd8, __VMLINUX_SYMBOL_STR(free_irq) },
 	{ 0xd6b8e852, __VMLINUX_SYMBOL_STR(request_threaded_irq) },
+	{ 0x65d6d0f0, __VMLINUX_SYMBOL_STR(gpio_direction_input) },
 	{ 0x47229b5c, __VMLINUX_SYMBOL_STR(gpio_request) },
+	{ 0x6c8d5ae8, __VMLINUX_SYMBOL_STR(__gpio_get_value) },
 	{ 0x4f68e5c9, __VMLINUX_SYMBOL_STR(do_gettimeofday) },
 	{ 0x67c2fa54, __VMLINUX_SYMBOL_STR(__copy_to_user) },
 	{ 0x2e5810c6, __VMLINUX_SYMBOL_STR(__aeabi_unwind_cpp_pr1) },
@@ -40,4 +42,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "D1598B00BE5C3637D1B2DA9");
+MODULE_INFO(srcversion, "1F67D194CA51148CF690995");

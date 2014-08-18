@@ -1,2 +1,2 @@
-/winston/project/bluefocus/module/trigger.ko
-/winston/project/bluefocus/module/trigger.o
+/winston/bluefocus/gitfolder/module/trigger.ko
+/winston/bluefocus/gitfolder/module/trigger.o

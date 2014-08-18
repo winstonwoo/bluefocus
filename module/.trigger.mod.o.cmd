@@ -1,8 +1,8 @@
-cmd_/winston/project/bluefocus/module/trigger.mod.o := /winston/raspberry/tools-master/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-gcc -Wp,-MD,/winston/project/bluefocus/module/.trigger.mod.o.d  -nostdinc -isystem /winston/raspberry/tools-master/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/../lib/gcc/arm-bcm2708-linux-gnueabi/4.7.1/include -I/winston/raspberry/linux-rpi-3.12.y/arch/arm/include -Iarch/arm/include/generated  -Iinclude -I/winston/raspberry/linux-rpi-3.12.y/arch/arm/include/uapi -Iarch/arm/include/generated/uapi -I/winston/raspberry/linux-rpi-3.12.y/include/uapi -Iinclude/generated/uapi -include /winston/raspberry/linux-rpi-3.12.y/include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Iarch/arm/mach-bcm2708/include -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -fno-dwarf2-cfi-asm -fstack-protector -mabi=aapcs-linux -mno-thumb-interwork -funwind-tables -marm -D__LINUX_ARM_ARCH__=6 -march=armv6 -mtune=arm1136j-s -msoft-float -Uarm -Wframe-larger-than=1024 -Wno-unused-but-set-variable -fomit-frame-pointer -fno-var-tracking-assignments -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack -DCC_HAVE_ASM_GOTO  -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(trigger.mod)"  -D"KBUILD_MODNAME=KBUILD_STR(trigger)" -DMODULE  -c -o /winston/project/bluefocus/module/trigger.mod.o /winston/project/bluefocus/module/trigger.mod.c
+cmd_/winston/bluefocus/gitfolder/module/trigger.mod.o := /winston/raspberry/tools-master/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-gcc -Wp,-MD,/winston/bluefocus/gitfolder/module/.trigger.mod.o.d  -nostdinc -isystem /winston/raspberry/tools-master/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/../lib/gcc/arm-bcm2708-linux-gnueabi/4.7.1/include -I/winston/raspberry/linux-rpi-3.12.y/arch/arm/include -Iarch/arm/include/generated  -Iinclude -I/winston/raspberry/linux-rpi-3.12.y/arch/arm/include/uapi -Iarch/arm/include/generated/uapi -I/winston/raspberry/linux-rpi-3.12.y/include/uapi -Iinclude/generated/uapi -include /winston/raspberry/linux-rpi-3.12.y/include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Iarch/arm/mach-bcm2708/include -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -fno-dwarf2-cfi-asm -fstack-protector -mabi=aapcs-linux -mno-thumb-interwork -funwind-tables -marm -D__LINUX_ARM_ARCH__=6 -march=armv6 -mtune=arm1136j-s -msoft-float -Uarm -Wframe-larger-than=1024 -Wno-unused-but-set-variable -fomit-frame-pointer -fno-var-tracking-assignments -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack -DCC_HAVE_ASM_GOTO  -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(trigger.mod)"  -D"KBUILD_MODNAME=KBUILD_STR(trigger)" -DMODULE  -c -o /winston/bluefocus/gitfolder/module/trigger.mod.o /winston/bluefocus/gitfolder/module/trigger.mod.c
 
-source_/winston/project/bluefocus/module/trigger.mod.o := /winston/project/bluefocus/module/trigger.mod.c
+source_/winston/bluefocus/gitfolder/module/trigger.mod.o := /winston/bluefocus/gitfolder/module/trigger.mod.c
 
-deps_/winston/project/bluefocus/module/trigger.mod.o := \
+deps_/winston/bluefocus/gitfolder/module/trigger.mod.o := \
     $(wildcard include/config/module/unload.h) \
   include/linux/module.h \
     $(wildcard include/config/sysfs.h) \
@@ -393,6 +393,6 @@ deps_/winston/project/bluefocus/module/trigger.mod.o := \
   include/linux/vermagic.h \
   include/generated/utsrelease.h \
 
-/winston/project/bluefocus/module/trigger.mod.o: $(deps_/winston/project/bluefocus/module/trigger.mod.o)
+/winston/bluefocus/gitfolder/module/trigger.mod.o: $(deps_/winston/bluefocus/gitfolder/module/trigger.mod.o)
 
-$(deps_/winston/project/bluefocus/module/trigger.mod.o):
+$(deps_/winston/bluefocus/gitfolder/module/trigger.mod.o):
