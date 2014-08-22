@@ -19,10 +19,17 @@
 
 5. Add the front ground picture display to mask the imformation of command line
    fbi -noverbose -T 2 mypic.jpg 
+
 6. port to Raspberry B+ board with linux 3.12.22+ kernel
    key point : the linux 3.12.y should be recompiled.
+
 7. For the B+ linux3.12.22+ the oxmplayer pid isn't followed the program pid.
    for all pid should be find and kill the oxmplayer pid correctly.
    others remain.  
 
 8. Add the gpio_get_value in IRQ function to confirm the gpio trigger source for debounce
+
+9. Modify the App
+   pgrep omxplayer.bin
+   kill omxplayer.bin
+   kill getpid()
