@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
-
+#include <sys/times.h>
 #include <sys/wait.h>
 
 #define CMD_BEGIN 0xab
@@ -23,6 +23,9 @@ int psdata[10] =
 int count = 0xff;
 int pidkill = 0xff;		//store the pid which should be kill for omxplayer
 int pidkill_b = 0x0;
+
+clock_t tBeginTime, tEndTime ;
+
 //count the number in one string line and convert them to int 
 	int *
 change (char *strg)
@@ -143,7 +146,33 @@ sub_main ()
 	myprintf ("^^^^^^^^^^^^^^^^^^^\n");
 }
 
+int insertMovie(){
+	int status ;
+	int fd ;
+	char str[LENGTH];
+	int len = 0 ;
+	char killstr[30] ;
+	
+	status = system ("pgrep omxplayer.bin > system.dat");
+	fd = open ("system.dat", O_RDWR);
 
+	if (fd)
+	{
+		len = read (fd, str, LENGTH);
+	}
+	close(fd) ;
+
+	printf("length is %d \n", len) ;       
+	if(!len){
+		if (fork () == 0){
+			status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+			sprintf(killstr, "kill %d", getpid()) ;
+			system(killstr) ;
+			exit (0);
+		}	
+	}
+        return 0 ;
+}
 
 	int
 main ()
@@ -156,19 +185,20 @@ main ()
 
 	char killstr[30] ;
 
+	tBeginTime = times(NULL) ;
 #if 0 
-		status = system ("fbi -noverbose -T 2 mypic.jpg ");
+	status = system ("fbi -noverbose -T 2 mypic.jpg ");
 #else	
-		if (fork () == 0)
-		{
-			myprintf ("I'm the child process. \n");
-			status = system ("fbi -noverbose -T 2 mypic.jpg ");
-			printf("fbi parent ID is %d\n", getppid()) ;	
-			printf("fbi ID is %d\n", getpid()) ;	
-			sprintf(killstr, "kill %d", getpid()) ;
-			system(killstr) ; 
-			exit (0);
-		}
+	if (fork () == 0)
+	{
+		myprintf ("I'm the child process. \n");
+		status = system ("fbi -noverbose -T 2 mypic.jpg ");
+		printf("fbi parent ID is %d\n", getppid()) ;	
+		printf("fbi ID is %d\n", getpid()) ;	
+		sprintf(killstr, "kill %d", getpid()) ;
+		system(killstr) ; 
+		exit (0);
+	}
 #endif
 
 	fd = open ("/dev/trigger", O_RDWR);
@@ -195,12 +225,12 @@ main ()
 
 	while (1)
 	{
-
 		read (fd, &val, sizeof (char));
 		myprintf ("val = %x\n", val);
 
 		switch (val)
 		{
+			
 			case 0x17:
 				sub_main ();
 				if (fork () == 0)
@@ -214,6 +244,7 @@ main ()
 					exit (0);
 				}
 				break;
+
 			case 0x18:
 				sub_main ();
 				if (fork () == 0)
@@ -247,38 +278,51 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x23 child process. \n");
-					//status = system ("omxplayer -o hdmi mov5.mp4 > trash");
-                                        system("poweroff") ;
+					status = system ("omxplayer -o hdmi mov5.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
- 
 
 					printf("omplayer mov5 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
+		
+			case 0x24:
+				sub_main ();
+				if (fork () == 0)
+				{
+					myprintf ("I'm 0x24 child process. \n");
+					status = system ("omxplayer -o hdmi mov1.mp4 > trash");
+					sprintf(killstr, "kill %d", getpid()) ;
+					system(killstr) ;
+
+					printf("omplayer mov7 ID is %d\n", getpid()) ;	
+					exit (0);
+				}
+				break;
+			
+			case 0x25:
+#if 0			
+				status = system ("reboot");
+#else
+                                printf("0x25 trigger happened !\n") ;
+#endif	
+				break;
+
 			default:
 				myprintf ("No trigger occur!\n");
 
 		}
-#if 0
-		if (val == 0x17)
-		{
-			if (fork () == 0)
-			{
-				myprintf ("I'm the child process. \n");
-				status = system ("omxplayer -o hdmi iphone.mp4");
-				close (fd);
-				exit (0);
-			}
-			else
-			{
-				myprintf ("I'm the parent. \n");
-			}
-		}
-#endif
+
 		ioctl (fd, CMD_BEGIN, 0xaa);
 		usleep (500);
+		
+		tEndTime = times(NULL) ;		
+                double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;	
+                if(fCostTime > 20){                
+		        tBeginTime = tEndTime ;	
+			insertMovie() ;
+		}
 	}
 
 	close (fd);

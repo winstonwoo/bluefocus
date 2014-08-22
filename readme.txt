@@ -33,3 +33,7 @@
    pgrep omxplayer.bin
    kill omxplayer.bin
    kill getpid()
+
+10. add GPIO25 for manual trigger
+
+

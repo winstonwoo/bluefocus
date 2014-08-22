@@ -24,6 +24,10 @@
 #define GPIO_18_GPIO                 18
 #define GPIO_22_GPIO                 22
 #define GPIO_23_GPIO                 23
+#define GPIO_24_GPIO                 24
+#define GPIO_25_GPIO                 25
+
+
 // text below will be seen in 'cat /proc/interrupt' command
 #define GPIO_ANY_GPIO_DESC           "Some gpio pin description"
 
@@ -50,13 +54,15 @@ short int irq_any_gpio    = 0;
 short int irq_18_gpio     = 0 ;
 short int irq_22_gpio     = 0 ;
 short int irq_23_gpio    = 0;
-
+short int irq_24_gpio    =0 ;
+short int irq_25_gpio    =0 ;
 
 unsigned int last_interrupt_time = 0;
 unsigned int last_interrupt18_time = 0;
 unsigned int last_interrupt22_time = 0;
 unsigned int last_interrupt23_time = 0;
-
+unsigned int last_interrupt24_time = 0 ;
+unsigned int last_interrupt25_time = 0 ;
 
 static uint64_t epochMilli;
 
@@ -207,6 +213,76 @@ static irqreturn_t r_irq23_handler(int irq, void *dev_id, struct pt_regs *regs) 
    return IRQ_HANDLED;
 }
 
+//****************************************************************************/
+/* IRQ handler - fired on interrupt                                         */
+/***************************************************************************/
+static irqreturn_t r_irq24_handler(int irq, void *dev_id, struct pt_regs *regs) {
+   unsigned long flags;
+   unsigned int interrupt_time = millis();
+   int gpioLevel = 0xff ;
+   
+   if (interrupt_time - last_interrupt24_time < 500) 
+   {
+     printk(KERN_NOTICE "Ignored Interrupt!!!!! [%d]%s \n",
+          irq, (char *) dev_id);
+     return IRQ_HANDLED;
+   }
+   last_interrupt24_time = interrupt_time;
+
+   // disable hard interrupts (remember them in flag 'flags')
+   local_irq_save(flags);
+
+
+   mdelay(100) ;
+   gpioLevel = gpio_get_value(GPIO_24_GPIO) ;
+   printk(KERN_NOTICE"gpio 24 !!!!level = 0x%x \n", gpioLevel) ; 
+   if(gpioLevel == 0x1) 
+   {	   trigger_status = 0x24 ;
+	   printk(KERN_NOTICE "Interrupt [%d] for device %s was triggered & trigger_status is %x !.\n",
+			   irq, (char *) dev_id, trigger_status);
+   } 
+  
+   // restore hard interrupts
+   local_irq_restore(flags);
+
+   return IRQ_HANDLED;
+}
+
+//****************************************************************************/
+/* IRQ handler - fired on interrupt                                         */
+/***************************************************************************/
+static irqreturn_t r_irq25_handler(int irq, void *dev_id, struct pt_regs *regs) {
+   unsigned long flags;
+   unsigned int interrupt_time = millis();
+   int gpioLevel = 0xff ;
+   
+   if (interrupt_time - last_interrupt25_time < 500) 
+   {
+     printk(KERN_NOTICE "Ignored Interrupt!!!!! [%d]%s \n",
+          irq, (char *) dev_id);
+     return IRQ_HANDLED;
+   }
+   last_interrupt25_time = interrupt_time;
+
+   // disable hard interrupts (remember them in flag 'flags')
+   local_irq_save(flags);
+
+
+   mdelay(100) ;
+   gpioLevel = gpio_get_value(GPIO_25_GPIO) ;
+   printk(KERN_NOTICE"gpio 25 !!!!level = 0x%x \n", gpioLevel) ; 
+   if(gpioLevel == 0x1) 
+   {	   trigger_status = 0x25 ;
+	   printk(KERN_NOTICE "Interrupt [%d] for device %s was triggered & trigger_status is %x !.\n",
+			   irq, (char *) dev_id, trigger_status);
+   } 
+  
+   // restore hard interrupts
+   local_irq_restore(flags);
+
+   return IRQ_HANDLED;
+}
+
 
 
 static int trigger_open(struct inode *inode, struct file* flip){
@@ -290,7 +366,21 @@ void r_int_config(void) {
       return;
    }
    gpio_direction_input(GPIO_23_GPIO) ;
+  
+   if (gpio_request(GPIO_24_GPIO, GPIO_ANY_GPIO_DESC)) {
+      printk("GPIO 24 request faiure: %s\n", GPIO_ANY_GPIO_DESC);
+      return;
+   }
+   gpio_direction_input(GPIO_24_GPIO) ;
    
+if (gpio_request(GPIO_25_GPIO, GPIO_ANY_GPIO_DESC)) {
+      printk("GPIO 25 request faiure: %s\n", GPIO_ANY_GPIO_DESC);
+      return;
+   }
+   gpio_direction_input(GPIO_25_GPIO) ;
+   
+
+ 
    //gpio_to_irq functions
    if ( (irq_any_gpio = gpio_to_irq(GPIO_ANY_GPIO)) < 0 ) {
       printk("GPIO 17 to IRQ mapping faiure %s\n", GPIO_ANY_GPIO_DESC);
@@ -312,12 +402,23 @@ void r_int_config(void) {
       return;
    }
 
+   if ( (irq_24_gpio = gpio_to_irq(GPIO_24_GPIO)) < 0 ) {
+      printk("GPIO 24 to IRQ mapping faiure %s\n", GPIO_ANY_GPIO_DESC);
+      return;
+   }
+
+   if ( (irq_25_gpio = gpio_to_irq(GPIO_25_GPIO)) < 0 ) {
+      printk("GPIO 25 to IRQ mapping faiure %s\n", GPIO_ANY_GPIO_DESC);
+      return;
+   }
 
    printk(KERN_NOTICE "Mapped int %d\n", irq_any_gpio);
    printk(KERN_NOTICE "Mapped int %d\n", irq_18_gpio);
    printk(KERN_NOTICE "Mapped int %d\n", irq_23_gpio);
    printk(KERN_NOTICE "Mapped int %d\n", irq_22_gpio);
-
+   printk(KERN_NOTICE "Mapped int %d\n", irq_24_gpio);
+   printk(KERN_NOTICE "Mapped int %d\n", irq_25_gpio);
+   
 
    //request_irq
    if (request_irq(irq_any_gpio,
@@ -356,6 +457,25 @@ void r_int_config(void) {
       return;
    }
 
+   if (request_irq(irq_24_gpio,
+                   (irq_handler_t ) r_irq24_handler,
+                   IRQF_TRIGGER_RISING,
+                   GPIO_ANY_GPIO_DESC,
+                   GPIO_ANY_GPIO_DEVICE_DESC)) {
+      printk("Irq 24 Request failure\n");
+      return;
+   }
+
+   if (request_irq(irq_25_gpio,
+                   (irq_handler_t ) r_irq25_handler,
+                   IRQF_TRIGGER_FALLING,
+                   GPIO_ANY_GPIO_DESC,
+                   GPIO_ANY_GPIO_DEVICE_DESC)) {
+      printk("Irq 25 Request failure\n");
+      return;
+   }
+
+
    return;
 }
 
@@ -376,6 +496,12 @@ void r_int_release(void) {
 
   free_irq(irq_23_gpio, GPIO_ANY_GPIO_DEVICE_DESC);
    gpio_free(GPIO_23_GPIO);
+
+  free_irq(irq_24_gpio, GPIO_ANY_GPIO_DEVICE_DESC);
+   gpio_free(GPIO_24_GPIO);
+
+  free_irq(irq_25_gpio, GPIO_ANY_GPIO_DEVICE_DESC);
+   gpio_free(GPIO_25_GPIO);
 
 
    return;
