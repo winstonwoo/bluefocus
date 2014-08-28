@@ -11,6 +11,7 @@
 #define CMD_BEGIN 0xab
 #define LENGTH	500
 
+//#define MY_LOG
 #ifdef MY_LOG
 #define myprintf printf
 #else
@@ -31,12 +32,13 @@ void *playThread(void *) ;
 int psdata[10] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 int count = 0xff;
 int pidkill = 0xff; 
+char moviename[20] ;
 
 int main(void){
 
 	pthread_t t_control ;
 	pthread_t t_play ;
- 
+    void *tret ; 
 
 	pthread_mutex_init(&mutex, NULL) ;
 	pthread_cond_init(&cond, NULL) ;
@@ -46,10 +48,12 @@ int main(void){
     pthread_create(&t_play, NULL, playThread, (void*)NULL) ;
 
 
-	pthread_join(t_control) ;
+	pthread_join(t_control, &tret) ;
 
 	pthread_mutex_destroy(&mutex) ;
 	pthread_cond_destroy(&cond) ;
+ 
+	myprintf("main exit!\n") ;
 
 	exit(0) ;
 }
@@ -59,6 +63,8 @@ void *controlThread(void *junk){
   
     char val = 0 ;
 
+	tBeginTime = times(NULL) ;
+	myprintf("contrl thread entered!\n") ;
     //Open trigger device	
 	fd = open ("/dev/trigger", O_RDWR);                                
 	if (fd < 0)                                                        
@@ -67,20 +73,74 @@ void *controlThread(void *junk){
 		exit (-1);                                                     
 	}                                                                  
 
+	//play beginning movie
+	check_kill_omxplayer() ;
+	pthread_mutex_lock(&mutex) ;
+	strcpy(moviename, "mov2.mp4") ;     
+	pthread_cond_signal(&cond) ;
+	pthread_mutex_unlock(&mutex) ;
+	
 	ioctl (fd, CMD_BEGIN, 0xaa);    
-    while(1){
-       read(fd, &val, sizeof(char)) ; 
-     
-       ioctl(fd, CMD_BEGIN, 0xaa) ;	
-	   usleep(500) ;
+	while(1){
+		read(fd, &val, sizeof(char)) ; 
+		switch (val){
+			case 0x17:
+				check_kill_omxplayer() ;
+				pthread_mutex_lock(&mutex) ;
+				strcpy(moviename, "mov3.mp4") ;     
+				pthread_cond_signal(&cond) ;
+				pthread_mutex_unlock(&mutex) ;
+				break;
+			case 0x18:
+				check_kill_omxplayer() ;
+				pthread_mutex_lock(&mutex) ;
+				strcpy(moviename, "mov4.mp4") ;     
+				pthread_cond_signal(&cond) ;
+				pthread_mutex_unlock(&mutex) ;
+				break;
+			case 0x22:
+				check_kill_omxplayer() ;
+				pthread_mutex_lock(&mutex) ;
+				strcpy(moviename, "mov5.mp4") ;     
+				pthread_cond_signal(&cond) ;
+				pthread_mutex_unlock(&mutex) ;
+				break;
+			case 0x23:
+				check_kill_omxplayer() ;
+				pthread_mutex_lock(&mutex) ;
+				strcpy(moviename, "mov6.mp4") ;     
+				pthread_cond_signal(&cond) ;
+				pthread_mutex_unlock(&mutex) ;
+				break;
+			case 0x24:
+				check_kill_omxplayer() ;
+				pthread_mutex_lock(&mutex) ;
+				strcpy(moviename, "mov7.mp4") ;     
+				pthread_cond_signal(&cond) ;
+				pthread_mutex_unlock(&mutex) ;
+				break;
+			case 0x25:
+#if 0           
+				status = system ("reboot");
+#else
+				printf("0x25 trigger happened !\n") ;
+#endif  
+				break;
 
+			default:
+				myprintf ("No trigger occur!\n");
 
-	   tEndTime = times(NULL) ;
-       double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;
-	   if(fCostTime > 20){
-	     tBeginTime = tEndTime ;
-         insertMovie() ;         
-	   } 
+		}
+
+		ioctl(fd, CMD_BEGIN, 0xaa) ;	
+		usleep(500) ;
+
+		tEndTime = times(NULL) ;
+		double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;
+		if(fCostTime > 20){
+			tBeginTime = tEndTime ;
+			insertMovie() ;         
+		} 
 	}
 
 
@@ -92,13 +152,33 @@ void *controlThread(void *junk){
 
 void *playThread(void *junk){
 
+	int status ;
+    char * pChar ;	
+	myprintf("player thread entered!\n") ;
+  
+    pChar = malloc(100) ;	
+	while(1){	
+		pthread_mutex_lock(&mutex) ;
+		pthread_cond_wait(&cond, &mutex) ;
 
+		sprintf(pChar, "omxplayer -o hdmi %s > trash", moviename) ;
+		myprintf(pChar) ;
+		status = system (pChar);
+		//pthread_mutex_unlock(&mutex) ;
+	}
+	free(pChar) ;
 }
 
 
 
-void triggerPlay(void){
+void triggerPlay(char* pMovie){
 
+	pthread_mutex_lock(&mutex) ;
+
+    strcpy(moviename, "mov1.mp4") ;     
+    pthread_cond_signal(&cond) ;
+
+	pthread_mutex_unlock(&mutex) ;
 
 }
 
@@ -112,8 +192,8 @@ int check_kill_omxplayer(){
 	char killstr[30] ;
     int  pid ;
 
-	status = system ("pgrep omxplayer.bin > system.dat");
-	fd = open ("system.dat", O_RDWR);
+	status = system ("pgrep omxplayer.bin > killpid.dat");
+	fd = open ("killpid.dat", O_RDWR);
 
 	if (fd)
 	{   
@@ -144,7 +224,7 @@ int  check_kill_pid(){
 	pidkill = 0x0;
 	status = system ("pgrep omxplayer.bin > system.dat");
 
-	system_data ();
+    analyse_pid() ;	
 	if (status == -1)
 	{
 		myprintf ("system error!");
@@ -244,6 +324,8 @@ int insertMovie(){
 	int len = 0 ; 
 	char killstr[30] ;
 
+
+	myprintf("insertMovie entered!\n") ;
 	status = system ("pgrep omxplayer.bin > system.dat");
 	fd = open ("system.dat", O_RDWR);
 
@@ -253,9 +335,13 @@ int insertMovie(){
 	}   
 	close(fd) ;
 
+
 	printf("length is %d \n", len) ;           
 	if(!len){
-			status = system ("omxplayer -o hdmi mov1.mp4 > trash");
+		pthread_mutex_lock(&mutex) ;
+		strcpy(moviename, "mov1.mp4") ;     
+		pthread_cond_signal(&cond) ;
+		pthread_mutex_unlock(&mutex) ;
 	}   
 	return 0 ; 
 }     
