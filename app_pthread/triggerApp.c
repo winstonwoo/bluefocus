@@ -36,9 +36,15 @@ int main(void){
 
 	pthread_t t_control ;
 	pthread_t t_play ;
+ 
+
+	pthread_mutex_init(&mutex, NULL) ;
+	pthread_cond_init(&cond, NULL) ;
+
 
 	pthread_create(&t_control, NULL, controlThread, (void*)	NULL) ;
     pthread_create(&t_play, NULL, playThread, (void*)NULL) ;
+
 
 	pthread_join(t_control) ;
 
@@ -249,7 +255,7 @@ int insertMovie(){
 
 	printf("length is %d \n", len) ;           
 	if(!len){
-			status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+			status = system ("omxplayer -o hdmi mov1.mp4 > trash");
 	}   
 	return 0 ; 
 }     
