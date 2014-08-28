@@ -466,6 +466,7 @@ if (gpio_request(GPIO_25_GPIO, GPIO_ANY_GPIO_DESC)) {
       return;
    }
 
+#if 0
    if (request_irq(irq_25_gpio,
                    (irq_handler_t ) r_irq25_handler,
                    IRQF_TRIGGER_FALLING,
@@ -474,7 +475,7 @@ if (gpio_request(GPIO_25_GPIO, GPIO_ANY_GPIO_DESC)) {
       printk("Irq 25 Request failure\n");
       return;
    }
-
+#endif
 
    return;
 }
@@ -499,10 +500,10 @@ void r_int_release(void) {
 
   free_irq(irq_24_gpio, GPIO_ANY_GPIO_DEVICE_DESC);
    gpio_free(GPIO_24_GPIO);
-
+#if 0
   free_irq(irq_25_gpio, GPIO_ANY_GPIO_DEVICE_DESC);
    gpio_free(GPIO_25_GPIO);
-
+#endif
 
    return;
 }
