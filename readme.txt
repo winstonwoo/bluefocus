@@ -36,4 +36,7 @@
 
 10. add GPIO25 for manual trigger
 
+11. rebuild the app without fork function 
+    Add pthread function into new app
+	in each thread while(1) there should be sleep for reschedule
 
