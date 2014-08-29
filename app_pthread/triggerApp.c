@@ -60,10 +60,13 @@ int main(void){
 
 void *controlThread(void *junk){
     int fd ;
-  
+    int status ; 
     char val = 0 ;
 
 	tBeginTime = times(NULL) ;
+    
+	status = system("fbi -noverbose -T 2 mypic.jpg") ;
+
 	myprintf("contrl thread entered!\n") ;
     //Open trigger device	
 	fd = open ("/dev/trigger", O_RDWR);                                
@@ -72,6 +75,7 @@ void *controlThread(void *junk){
 		perror ("fail to open");                                       
 		exit (-1);                                                     
 	}                                                                  
+   
 #if 1 
 	//play beginning movie
 	check_kill_omxplayer() ;
@@ -84,46 +88,31 @@ void *controlThread(void *junk){
 	while(1){
 
 		read(fd, &val, sizeof(char)) ; 
-
-#if 1 
 		switch (val){
 			case 0x17:
 				check_kill_omxplayer() ;
-				pthread_mutex_lock(&mutex) ;
-				strcpy(moviename, "mov3.mp4") ;     
-				pthread_cond_signal(&cond) ;
-				pthread_mutex_unlock(&mutex) ;
+				insertMovie("mov4.mp4") ;
+
 				break;
 			case 0x18:
 				check_kill_omxplayer() ;
-				pthread_mutex_lock(&mutex) ;
-				strcpy(moviename, "mov4.mp4") ;     
-				pthread_cond_signal(&cond) ;
-				pthread_mutex_unlock(&mutex) ;
+				insertMovie("mov5.mp4") ;
+
 				break;
 			case 0x22:
 				check_kill_omxplayer() ;
-				pthread_mutex_lock(&mutex) ;
-				strcpy(moviename, "mov5.mp4") ;     
-				pthread_cond_signal(&cond) ;
-				pthread_mutex_unlock(&mutex) ;
+				insertMovie("mov3.mp4") ;
+
 				break;
 			case 0x23:
 				check_kill_omxplayer() ;
-				insertMovie() ;
-#if 0	
-				pthread_mutex_lock(&mutex) ;
-				strcpy(moviename, "mov6.mp4") ;     
-				pthread_cond_signal(&cond) ;
-				pthread_mutex_unlock(&mutex) ;
-#endif	
+				insertMovie("mov7.mp4") ;
+
 				break;
 			case 0x24:
 				check_kill_omxplayer() ;
-				pthread_mutex_lock(&mutex) ;
-				strcpy(moviename, "mov7.mp4") ;     
-				pthread_cond_signal(&cond) ;
-				pthread_mutex_unlock(&mutex) ;
+				insertMovie("mov4.mp4") ;
+
 				break;
 			case 0x25:
 #if 0           
@@ -135,22 +124,20 @@ void *controlThread(void *junk){
 
 			default:
 				//myprintf ("No trigger occur!\n");
-               break ;
+				break ;
 		}
-#endif
+		
 		ioctl(fd, CMD_BEGIN, 0xaa) ;	
 
 		tEndTime = times(NULL) ;
 		double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;
 		if(fCostTime > 50){
 			tBeginTime = tEndTime ;
-			insertMovie() ;         
+			insertMovie("mov1.mp4") ;         
 		} 
 	
 		sleep(1) ;
 	}
-
-
 
     //Close trigger device
 	close (fd);                                                                                       
@@ -331,7 +318,7 @@ int pidstr2num (char *strg)
 }
 
 
-int insertMovie(){
+int insertMovie(char* pName){
 	int status ;
 	int fd ;
 	char str[LENGTH];
@@ -354,7 +341,7 @@ int insertMovie(){
 	if(!len){
 		pthread_mutex_lock(&mutex) ;
         memset(moviename, 0, sizeof(moviename)) ;
-		strcpy(moviename, "mov1.mp4") ;     
+		strcpy(moviename, pName) ;     
 		pthread_cond_signal(&cond) ;
 		pthread_mutex_unlock(&mutex) ;
 	}  

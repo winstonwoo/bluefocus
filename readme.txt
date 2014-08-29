@@ -40,3 +40,6 @@
     Add pthread function into new app
 	in each thread while(1) there should be sleep for reschedule
 
+12. The kernel will kill user's pid if there isn't sleep() in the while(1) loop.
+ 
+
