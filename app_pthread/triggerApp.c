@@ -90,26 +90,35 @@ void *controlThread(void *junk){
 		read(fd, &val, sizeof(char)) ; 
 		switch (val){
 			case 0x17:
+                printf("0x17 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov4.mp4") ;
 
 				break;
 			case 0x18:
+
+                printf("0x18 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov5.mp4") ;
 
 				break;
 			case 0x22:
+
+                printf("0x22 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov3.mp4") ;
 
 				break;
 			case 0x23:
+
+                printf("0x23 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov7.mp4") ;
 
 				break;
 			case 0x24:
+
+                printf("0x24 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov4.mp4") ;
 
@@ -188,7 +197,7 @@ int check_kill_omxplayer(){
 	char killstr[30] ;
     int  pid ;
 
-	myprintf("check_kill_omxplayer entered!\n") ;
+	printf("check_kill_omxplayer entered!\n") ;
 #if 0	
 	status = system ("pgrep omxplayer.bin > killpid.dat");
 	fd = open ("killpid.dat", O_RDONLY);
@@ -211,7 +220,7 @@ int check_kill_omxplayer(){
 #else
     status = system("killall omxplayer.bin") ;
 #endif	
-	myprintf("check_kill_omxplayer exit!\n") ;
+	printf("check_kill_omxplayer exit!\n") ;
 	return 0 ; 
 }
 
