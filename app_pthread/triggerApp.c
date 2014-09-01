@@ -199,8 +199,9 @@ int check_kill_omxplayer(){
 
 	printf("check_kill_omxplayer entered!\n") ;
 #if 0	
-	status = system ("pgrep omxplayer.bin > killpid.dat");
-	fd = open ("killpid.dat", O_RDONLY);
+	myprintf("\ninsertMovie entered!\n") ;
+	status = system ("pgrep omxplayer.bin > system.dat");
+	fd = open ("system.dat", O_RDWR);
 
 	if (fd)
 	{   
@@ -219,6 +220,9 @@ int check_kill_omxplayer(){
 	}   
 #else
     status = system("killall omxplayer.bin") ;
+    status = system("killall omxplayer.bin") ;
+    status = system("killall omxplayer.bin") ;
+	status = system("killall omxplayer.bin") ;
 #endif	
 	printf("check_kill_omxplayer exit!\n") ;
 	return 0 ; 

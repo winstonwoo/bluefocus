@@ -42,4 +42,4 @@
 
 12. The kernel will kill user's pid if there isn't sleep() in the while(1) loop.
  
-
+13. Add sleep(1) in app/triggerApp.c for overcoming pid killed issue.

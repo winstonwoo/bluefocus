@@ -1,4 +1,6 @@
-#include <stdio.h> #include <stdlib.h> #include <unistd.h>
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
@@ -163,7 +165,7 @@ int insertMovie(){
 	printf("length is %d \n", len) ;       
 	if(!len){
 		if (fork () == 0){
-			status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+			status = system ("omxplayer -o hdmi mov1.mp4 > trash");
 			sprintf(killstr, "kill %d", getpid()) ;
 			system(killstr) ;
 			exit (0);
@@ -313,7 +315,7 @@ main ()
 		}
 
 		ioctl (fd, CMD_BEGIN, 0xaa);
-		usleep (500);
+		sleep (1);
 		
 		tEndTime = times(NULL) ;		
                 double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;	
