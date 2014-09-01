@@ -26,7 +26,7 @@
 #define GPIO_23_GPIO                 23   //trigger 4
 #define GPIO_24_GPIO                 24   //trigger 5
 #define GPIO_25_GPIO                 25   //trigger 6
-#define GPIO_21_GPIO                 21   //Reboot
+#define GPIO_21_GPIO                 27   //Reboot /*this pin is defined as 27 in ver2board and 21 in version1 board*/
 #define GPIO_4_GPIO                  4    //backup
 
 
