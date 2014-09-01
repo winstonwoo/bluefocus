@@ -186,9 +186,7 @@ main ()
 	char killstr[30] ;
 
 	tBeginTime = times(NULL) ;
-#if 0 
-	status = system ("fbi -noverbose -T 2 mypic.jpg ");
-#else	
+	
 	if (fork () == 0)
 	{
 		myprintf ("I'm the child process. \n");
@@ -199,7 +197,6 @@ main ()
 		system(killstr) ; 
 		exit (0);
 	}
-#endif
 
 	fd = open ("/dev/trigger", O_RDWR);
 
@@ -302,12 +299,43 @@ main ()
 				break;
 			
 			case 0x25:
-#if 0			
-				status = system ("reboot");
+				sub_main ();
+				if (fork () == 0)
+				{
+					myprintf ("I'm 0x25 child process. \n");
+					status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+					sprintf(killstr, "kill %d", getpid()) ;
+					system(killstr) ;
+
+					printf("omplayer mov7 ID is %d\n", getpid()) ;	
+					exit (0);
+				}
+	
+				break;
+			
+			case 0x21:
+					status = system ("reboot");
+				break;
+
+			case 0x4:
+#if 0
+				sub_main ();
+				if (fork () == 0)
+				{
+					myprintf ("I'm 0x25 child process. \n");
+					status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+					sprintf(killstr, "kill %d", getpid()) ;
+					system(killstr) ;
+
+					printf("omplayer mov7 ID is %d\n", getpid()) ;	
+					exit (0);
+				}
 #else
-                                printf("0x25 trigger happened !\n") ;
+
+				myprintf ("I'm 0x4 trigger process. \n");
 #endif	
 				break;
+
 
 			default:
 				myprintf ("No trigger occur!\n");

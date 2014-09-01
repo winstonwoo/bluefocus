@@ -1,2 +1,2 @@
-/winston/bluefocus/gitfolder/module/trigger.ko
-/winston/bluefocus/gitfolder/module/trigger.o
+/winston/share-raspberry/gitfolder/bluefocus/module/trigger.ko
+/winston/share-raspberry/gitfolder/bluefocus/module/trigger.o
