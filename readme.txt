@@ -43,3 +43,9 @@
 12. The kernel will kill user's pid if there isn't sleep() in the while(1) loop.
  
 13. Add sleep(1) in app/triggerApp.c for overcoming pid killed issue.
+
+14. Modified app_thread but there is still problems if many trigger occured at same time 
+    no feedback will response for new trigger.
+
+15. 2014-09-04 
+    Now release new version for exhenbition in ZhengZhou with app

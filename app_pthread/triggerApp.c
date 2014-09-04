@@ -7,6 +7,7 @@
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <sys/times.h>
+#include <syslog.h>
 
 #define CMD_BEGIN 0xab
 #define LENGTH	500
@@ -90,35 +91,35 @@ void *controlThread(void *junk){
 		read(fd, &val, sizeof(char)) ; 
 		switch (val){
 			case 0x17:
-                printf("0x17 trigger\n") ;
+                syslog(LOG_USER|LOG_INFO,"0x17 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov4.mp4") ;
 
 				break;
 			case 0x18:
 
-                printf("0x18 trigger\n") ;
+                syslog(LOG_USER|LOG_INFO,"0x18 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov5.mp4") ;
 
 				break;
 			case 0x22:
 
-                printf("0x22 trigger\n") ;
+                syslog(LOG_USER|LOG_INFO,"0x22 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov3.mp4") ;
 
 				break;
 			case 0x23:
 
-                printf("0x23 trigger\n") ;
+                syslog(LOG_USER|LOG_INFO,"0x23 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov7.mp4") ;
 
 				break;
 			case 0x24:
 
-                printf("0x24 trigger\n") ;
+                syslog(LOG_USER|LOG_INFO,"0x24 trigger\n") ;
 				check_kill_omxplayer() ;
 				insertMovie("mov4.mp4") ;
 
@@ -127,7 +128,7 @@ void *controlThread(void *junk){
 #if 0           
 				status = system ("reboot");
 #else
-				printf("0x25 trigger happened !\n") ;
+				syslog(LOG_USER|LOG_INFO,"0x25 trigger happened !\n") ;
 #endif  
 				break;
 
@@ -145,7 +146,7 @@ void *controlThread(void *junk){
 			insertMovie("mov1.mp4") ;         
 		} 
 	
-		sleep(1) ;
+		usleep(100*1000) ;
 	}
 
     //Close trigger device
@@ -160,31 +161,21 @@ void *playThread(void *junk){
 	myprintf("player thread entered!\n") ;
 
 	while(1){	
+
 		pthread_mutex_lock(&mutex) ;
+		syslog(LOG_USER|LOG_INFO,"playThread wait before!\n") ; 
 		pthread_cond_wait(&cond, &mutex) ;
 
-		myprintf("omxplayer file %s\n",moviename) ; 
+		usleep(100*1000) ;
+		syslog(LOG_USER|LOG_INFO," %s player beginning\n",moviename) ; 
 		sprintf(pChar, "omxplayer -o hdmi %s > trash", moviename) ;
 		myprintf(pChar) ;
-
-		sleep(1) ;
 		status = system (pChar);
-
+		syslog(LOG_USER|LOG_INFO," %s player complete\n",moviename) ; 
+		
 		pthread_mutex_unlock(&mutex) ;
+		syslog(LOG_USER|LOG_INFO,"playThread unlock after!\n") ; 
 	}
-}
-
-
-
-void triggerPlay(char* pMovie){
-
-	pthread_mutex_lock(&mutex) ;
-
-    strcpy(moviename, "mov1.mp4") ;     
-    pthread_cond_signal(&cond) ;
-
-	pthread_mutex_unlock(&mutex) ;
-
 }
 
 
@@ -197,7 +188,6 @@ int check_kill_omxplayer(){
 	char killstr[30] ;
     int  pid ;
 
-	printf("check_kill_omxplayer entered!\n") ;
 #if 0	
 	myprintf("\ninsertMovie entered!\n") ;
 	status = system ("pgrep omxplayer.bin > system.dat");
@@ -219,12 +209,14 @@ int check_kill_omxplayer(){
 	  system(killstr) ;
 	}   
 #else
-    status = system("killall omxplayer.bin") ;
-    status = system("killall omxplayer.bin") ;
+
+	syslog(LOG_USER|LOG_INFO,"check_kill_omxplayer begin!\n") ;
+    status = system("killall omxplayer") ;
+    status = system("killall omxplayer") ;
     status = system("killall omxplayer.bin") ;
 	status = system("killall omxplayer.bin") ;
 #endif	
-	printf("check_kill_omxplayer exit!\n") ;
+	syslog(LOG_USER|LOG_INFO,"check_kill_omxplayer complete!\n") ;
 	return 0 ; 
 }
 
@@ -339,7 +331,7 @@ int insertMovie(char* pName){
 	char killstr[30] ;
 
 
-	myprintf("\ninsertMovie entered!\n") ;
+	//syslog(LOG_USER|LOG_INFO,"insertMovie entered!\n") ;
 	status = system ("pgrep omxplayer.bin > system.dat");
 	fd = open ("system.dat", O_RDWR);
 
@@ -350,16 +342,19 @@ int insertMovie(char* pName){
 	close(fd) ;
 
 
-	printf("length is %d \n", len) ;           
+	syslog(LOG_USER|LOG_INFO,"length is %d \n", len) ;           
 	if(!len){
 		pthread_mutex_lock(&mutex) ;
-        memset(moviename, 0, sizeof(moviename)) ;
+		syslog(LOG_USER|LOG_INFO,"insertMovie lock after!\n") ;
+   		memset(moviename, 0, sizeof(moviename)) ;
 		strcpy(moviename, pName) ;     
 		pthread_cond_signal(&cond) ;
 		pthread_mutex_unlock(&mutex) ;
+        usleep(10*1000) ;     
+		syslog(LOG_USER|LOG_INFO,"insertMovie mutex unlock complete!\n") ;
 	}  
 
      
-	myprintf("insertMovie exit!\n") ;
+	//syslog(LOG_USER|LOG_INFO,"insertMovie exit!\n") ;
 	return 0 ; 
 }     
