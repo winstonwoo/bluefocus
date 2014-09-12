@@ -36,7 +36,7 @@ int main(void){
 	while(1){
       read(fd, &val, sizeof(char)) ;
 
-	  syslog(LOG_USER|LOG_INFO,"shutApp %d trigger\n", val) ;
+//	  syslog(LOG_USER|LOG_INFO,"shutApp %d trigger\n", val) ;
 	  switch (val){
 		  case 0x4:
 			  ioctl(fd, CMD_BEGIN, 0xaa) ;		
