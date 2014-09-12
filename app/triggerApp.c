@@ -227,8 +227,10 @@ main ()
 
 		switch (val)
 		{
-			
+
 			case 0x17:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -241,6 +243,8 @@ main ()
 				break;
 
 			case 0x18:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -253,6 +257,8 @@ main ()
 				break;
 
 			case 0x22:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -265,6 +271,8 @@ main ()
 				break;
 
 			case 0x23:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -275,8 +283,10 @@ main ()
 					exit (0);
 				}
 				break;
-		
+
 			case 0x24:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -287,8 +297,10 @@ main ()
 					exit (0);
 				}
 				break;
-			
+
 			case 0x25:
+
+				ioctl (fd, CMD_BEGIN, 0xaa);
 				sub_main ();
 				if (fork () == 0)
 				{
@@ -298,36 +310,32 @@ main ()
 					system(killstr) ;
 					exit (0);
 				}
-	
-				break;
-			
-			case 0x21:
-					status = system ("reboot");
+
 				break;
 
+			case 0x21:
+				status = system ("reboot");
+				break;
+
+#if 0
 			case 0x4:
-#if 1 
 				status = system ("poweroff");
-		
-#else
 
 				myprintf ("I'm 0x4 trigger process. \n");
-#endif	
 				break;
-
-
+#endif	
 			default:
 				myprintf ("No trigger occur!\n");
 
 		}
 
-		ioctl (fd, CMD_BEGIN, 0xaa);
+		//ioctl (fd, CMD_BEGIN, 0xaa);
 		sleep (1);
-		
+
 		tEndTime = times(NULL) ;		
-                double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;	
-                if(fCostTime > 20){                
-		        tBeginTime = tEndTime ;	
+		double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;	
+		if(fCostTime > 20){                
+			tBeginTime = tEndTime ;	
 			insertMovie() ;
 		}
 	}

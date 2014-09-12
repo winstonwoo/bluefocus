@@ -52,3 +52,6 @@
 
 16. 2014-09-12
     Add system("poweroff") ;
+
+17. 2014-09-14
+   change ioctl() function location for avoid trigger mistake
