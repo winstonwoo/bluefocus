@@ -55,3 +55,6 @@
 
 17. 2014-09-14
    change ioctl() function location for avoid trigger mistake
+
+18. 2014-09-14
+   MP and burn into sdcard, add cinema folder for MP material

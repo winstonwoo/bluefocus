@@ -334,7 +334,7 @@ main ()
 
 		tEndTime = times(NULL) ;		
 		double fCostTime = (double)(tEndTime - tBeginTime)/sysconf(_SC_CLK_TCK) ;	
-		if(fCostTime > 20){                
+		if(fCostTime > 5){                
 			tBeginTime = tEndTime ;	
 			insertMovie() ;
 		}
