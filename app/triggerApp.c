@@ -165,7 +165,7 @@ int insertMovie(){
 	printf("length is %d \n", len) ;       
 	if(!len){
 		if (fork () == 0){
-			status = system ("omxplayer -o hdmi mov1.mp4 > trash");
+			status = system ("omxplayer -o hdmi mov7.mp4 > trash");
 			sprintf(killstr, "kill %d", getpid()) ;
 			system(killstr) ;
 			exit (0);
@@ -211,7 +211,7 @@ main ()
 	if (fork () == 0)
 	{
 		myprintf ("I'm the child process. \n");
-		status = system ("omxplayer -o hdmi mov6.mp4 >trash");
+		status = system ("omxplayer -o hdmi mov7.mp4 >trash");
 
 		sprintf(killstr, "kill %d", getpid()) ;
 		system(killstr) ; 
@@ -233,11 +233,9 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm  0x17child process. \n");
-					status = system ("omxplayer -o hdmi mov2.mp4 >trash");
+					status = system ("omxplayer -o hdmi mov1.mp4 >trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
-
-					printf("omplayer mov2 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
@@ -250,8 +248,6 @@ main ()
 					status = system ("omxplayer -o hdmi mov3.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
-
-					printf("omplayer mov3 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
@@ -261,11 +257,9 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x22 child process. \n");
-					status = system ("omxplayer -o hdmi mov4.mp4 > trash");
+					status = system ("omxplayer -o hdmi mov2.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
-
-					printf("omplayer mov4 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
@@ -275,11 +269,9 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x23 child process. \n");
-					status = system ("omxplayer -o hdmi mov5.mp4 > trash");
+					status = system ("omxplayer -o hdmi mov4.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
-
-					printf("omplayer mov5 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
@@ -289,11 +281,9 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x24 child process. \n");
-					status = system ("omxplayer -o hdmi mov1.mp4 > trash");
+					status = system ("omxplayer -o hdmi mov5.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
-
-					printf("omplayer mov7 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 				break;
@@ -303,11 +293,9 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x25 child process. \n");
-					status = system ("omxplayer -o hdmi mov7.mp4 > trash");
+					status = system ("omxplayer -o hdmi mov6.mp4 > trash");
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
-
-					printf("omplayer mov7 ID is %d\n", getpid()) ;	
 					exit (0);
 				}
 	
@@ -318,18 +306,9 @@ main ()
 				break;
 
 			case 0x4:
-#if 0
-				sub_main ();
-				if (fork () == 0)
-				{
-					myprintf ("I'm 0x25 child process. \n");
-					status = system ("omxplayer -o hdmi mov7.mp4 > trash");
-					sprintf(killstr, "kill %d", getpid()) ;
-					system(killstr) ;
-
-					printf("omplayer mov7 ID is %d\n", getpid()) ;	
-					exit (0);
-				}
+#if 1 
+				status = system ("poweroff");
+		
 #else
 
 				myprintf ("I'm 0x4 trigger process. \n");

@@ -49,3 +49,6 @@
 
 15. 2014-09-04 
     Now release new version for exhenbition in ZhengZhou with app
+
+16. 2014-09-12
+    Add system("poweroff") ;
