@@ -58,3 +58,17 @@
 
 18. 2014-09-14
    MP and burn into sdcard, add cinema folder for MP material
+
+19. 2014-10-24
+    Add python & uinput for keyboard KEY_SPACE simuation for omxplayer controlling
+	pt-get install libudev-dev
+	sudo modprobe uinput
+	git clone https://github.com/tuomasjjrasanen/python-uinput
+	cd python-uinput
+	sudo python setup.py install --prefix=/usr/local
+	cd python-uinputll
+	python setup.py build
+	python setup.py insta
+	cd python-uinput/examples/
+	python ./keyboard.py
+
