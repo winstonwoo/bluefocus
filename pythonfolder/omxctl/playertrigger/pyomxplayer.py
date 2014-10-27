@@ -35,6 +35,7 @@ import RPi.GPIO as GPIO
 _DEBUG=False
 # function to play a track
 global gFileName
+global gLabel = False
 def omx_play(omxoptions, track):
     '''
     # KEYBOARD
@@ -49,36 +50,45 @@ def omx_play(omxoptions, track):
     '''
     def gpio_poll():
         global gFileName
+        global gLabel
+        
         if GPIO.input(4) == True:
             print "4 triggered" 
-            return "p"
-        if GPIO.input(17) == True:
-            print "17 triggered" 
-            gFileName = "mov1.mp4"
-            return "q"
-        if GPIO.input(18) == True:
-            print "18 triggered" 
-            gFileName = "mov3.mp4"
-            return "q"
-        if GPIO.input(22) == True:
-            print "22 triggered" 
-            gFileName = "mov2.mp4"
-            return "q"
-        if GPIO.input(23) == True:
-            gFileName = "mov4.mp4"
-            print "23 triggered"
-            return "q"
-        if GPIO.input(24) == True:
-            gFileName = "mov5.mp4"
-            print "24 triggered" 
-            return "q"
-        if GPIO.input(25) == True:
-            gFileName = "mov6.mp4"
-            print "25 triggered"
-            return "q"
-        if GPIO.input(21) == True:
-            print "21 triggered" 
-            os.system("reboot")
+            if gLabel == False:
+		    gLabel = True
+            else:
+                    gLabel = False
+	    return "p"
+        
+	if gLabel == False:        
+	        if GPIO.input(17) == True:
+		    print "17 triggered" 
+		    gFileName = "mov1.mp4"
+		    return "q"
+		if GPIO.input(18) == True:
+		    print "18 triggered" 
+		    gFileName = "mov3.mp4"
+		    return "q"
+		if GPIO.input(22) == True:
+		    print "22 triggered" 
+		    gFileName = "mov2.mp4"
+		    return "q"
+		if GPIO.input(23) == True:
+		    gFileName = "mov4.mp4"
+		    print "23 triggered"
+		    return "q"
+		if GPIO.input(24) == True:
+		    gFileName = "mov5.mp4"
+		    print "24 triggered" 
+		    return "q"
+		if GPIO.input(25) == True:
+		    gFileName = "mov6.mp4"
+		    print "25 triggered"
+		    return "q"
+        
+	if GPIO.input(21) == True:
+		    print "21 triggered" 
+		    os.system("reboot")
 
 
 
