@@ -41,6 +41,8 @@ int main(void){
 		  case 0x4:
 			  ioctl(fd, CMD_BEGIN, 0xaa) ;		
 			  syslog(LOG_USER|LOG_INFO,"!!!!shutApp 0x4 trigger entere!\n") ;
+              system("python pause.py") ;
+#if 0
 			  if(work){
 				  system("killall triggerApp");
 				  system("killall omxplayer") ;
@@ -60,9 +62,11 @@ int main(void){
 				      exit(0) ;	  
 				  } 
 			  }
+			  
+#endif
 			  break ;
 		  default:
-			 // syslog(LOG_USER|LOG_INFO,"shutApp\n") ;
+			  syslog(LOG_USER|LOG_INFO,"not shutApp trigger\n") ;
 
 			  break ;
 

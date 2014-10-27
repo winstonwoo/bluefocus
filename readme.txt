@@ -72,3 +72,8 @@
 	cd python-uinput/examples/
 	python ./keyboard.py
 
+20. 2014-10-27
+   Python mode to realize whole project.
+   RPi.GPIO for gpio monitor
+   subprocess for omxplayer controlling
+   pipe for command signal transmit
