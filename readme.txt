@@ -77,3 +77,6 @@
    RPi.GPIO for gpio monitor
    subprocess for omxplayer controlling
    pipe for command signal transmit
+
+
+
