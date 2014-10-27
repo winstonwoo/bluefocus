@@ -35,7 +35,7 @@ import RPi.GPIO as GPIO
 _DEBUG=False
 # function to play a track
 global gFileName
-global gLabel = False
+global gLabel
 def omx_play(omxoptions, track):
     '''
     # KEYBOARD
@@ -270,6 +270,7 @@ check_runnable()
 
 #configure raspberry gpio pin as input
 set_gpio()
+gLabel = False
 # ask where to send the sound
 #while True:
 #    print ("Output, hdmi or local")
