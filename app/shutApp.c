@@ -72,7 +72,7 @@ int main(void){
 			  break ;
 #endif	
 	  default:
-			  syslog(LOG_USER|LOG_INFO,"not shutApp trigger\n") ;
+//			  syslog(LOG_USER|LOG_INFO,"not shutApp trigger\n") ;
 
 			  break ;
 

@@ -113,7 +113,7 @@ sub_main ()
 
 	pidkill = 0x0;
 	
-	status = system ("echo -n q > myfifo");
+	//status = system ("echo -n q > myfifo");
 	status = system ("pgrep omxplayer.bin > system.dat");
 
 	system_data ();
@@ -237,7 +237,7 @@ main ()
 	{
 		read (fd, &val, sizeof (char));
 		myprintf ("val = %x\n", val);
-#if 0 
+#if 1 
 		switch (val)
 		{
 
@@ -248,10 +248,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm  0x17child process. \n");
-					status = system ("omxplayer -o hdmi mov1.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov1.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ; 
+					system(killstr) ; 
 					exit (0);
 				}
 				break;
@@ -263,10 +263,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x18 child process. \n");
-					status = system ("omxplayer -o hdmi mov3.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov3.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ; 
+					system(killstr) ; 
 					exit (0);
 				}
 				break;
@@ -278,10 +278,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x22 child process. \n");
-					status = system ("omxplayer -o hdmi mov2.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov2.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ; 
+					system(killstr) ; 
 					exit (0);
 				}
 				break;
@@ -293,10 +293,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x23 child process. \n");
-					status = system ("omxplayer -o hdmi mov4.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov4.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ;
+					system(killstr) ;
 					exit (0);
 				}
 				break;
@@ -308,10 +308,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x24 child process. \n");
-					status = system ("omxplayer -o hdmi mov5.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov5.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ;
+					system(killstr) ;
 					exit (0);
 				}
 				break;
@@ -323,10 +323,10 @@ main ()
 				if (fork () == 0)
 				{
 					myprintf ("I'm 0x25 child process. \n");
-					status = system ("omxplayer -o hdmi mov6.mp4 < myfifo");
+					status = system ("omxplayer -o hdmi mov6.mp4 < myfifo &");
 					status = system ("echo -n . > myfifo") ;
 					sprintf(killstr, "kill %d", getpid()) ;
-					//system(killstr) ;
+					system(killstr) ;
 					exit (0);
 				}
 
@@ -335,14 +335,12 @@ main ()
 			case 0x21:
 				status = system ("reboot");
 				break;
-
 #if 0
 			case 0x4:
-				status = system ("poweroff");
-
+				status = system ("echo -n p > myfifo");
 				myprintf ("I'm 0x4 trigger process. \n");
 				break;
-#endif	
+#endif			
 			default:
 				myprintf ("No trigger occur!\n");
 
