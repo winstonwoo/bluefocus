@@ -24,7 +24,6 @@ int main(void){
 	if(!fd){
      printf("failed open!\n") ;
 	}
-	
 	if(fork()== 0){
 		system("cd /winston/cinema") ;
 		system("./triggerApp") ;	 
@@ -32,7 +31,6 @@ int main(void){
 		system(killstr) ;
 		exit(0) ;	  
 	}
-
 	while(1){
       read(fd, &val, sizeof(char)) ;
 
@@ -41,8 +39,9 @@ int main(void){
 		  case 0x4:
 			  ioctl(fd, CMD_BEGIN, 0xaa) ;		
 			  syslog(LOG_USER|LOG_INFO,"!!!!shutApp 0x4 trigger entere!\n") ;
-              system("python pause.py") ;
-#if 0
+#if 1 
+              system("echo -n p > myfifo") ;
+#else
 			  if(work){
 				  system("killall triggerApp");
 				  system("killall omxplayer") ;
@@ -65,7 +64,14 @@ int main(void){
 			  
 #endif
 			  break ;
-		  default:
+#if 0
+		  case 0x25:
+			  ioctl(fd, CMD_BEGIN, 0xaa) ;		
+
+              system("echo -n . > myfifo") ;
+			  break ;
+#endif	
+	  default:
 			  syslog(LOG_USER|LOG_INFO,"not shutApp trigger\n") ;
 
 			  break ;

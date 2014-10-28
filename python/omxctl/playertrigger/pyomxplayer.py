@@ -34,8 +34,9 @@ import subprocess, os, time, sys, select
 import RPi.GPIO as GPIO
 _DEBUG=False
 # function to play a track
-global gFileName
-global gLabel
+global gFileName  #transmit file name to track
+global gLabel     #Set the label for pause/continue key
+global gTriggerKey  #set the current triggerd key from interrupt call back
 def omx_play(omxoptions, track):
     '''
     # KEYBOARD
@@ -51,7 +52,7 @@ def omx_play(omxoptions, track):
     def gpio_poll():
         global gFileName
         global gLabel
-        
+        global gTriggerKey 
         if GPIO.input(4) == True:
             print "4 triggered" 
             if gLabel == False:
@@ -60,35 +61,38 @@ def omx_play(omxoptions, track):
                     gLabel = False
 	    return "p"
         
-	if gLabel == False:        
-	        if GPIO.input(17) == True:
-		    print "17 triggered" 
-		    gFileName = "mov1.mp4"
-		    return "q"
-		if GPIO.input(18) == True:
-		    print "18 triggered" 
-		    gFileName = "mov3.mp4"
-		    return "q"
-		if GPIO.input(22) == True:
-		    print "22 triggered" 
-		    gFileName = "mov2.mp4"
-		    return "q"
-		if GPIO.input(23) == True:
-		    gFileName = "mov4.mp4"
-		    print "23 triggered"
-		    return "q"
-		if GPIO.input(24) == True:
-		    gFileName = "mov5.mp4"
-		    print "24 triggered" 
-		    return "q"
-		if GPIO.input(25) == True:
-		    gFileName = "mov6.mp4"
-		    print "25 triggered"
-		    return "q"
-        
-	if GPIO.input(21) == True:
-		    print "21 triggered" 
-		    os.system("reboot")
+        if gLabel == False: 
+            '''
+            if GPIO.input(17) == True:
+                print "17 triggered" 
+                gFileName = "mov1.mp4"
+                return "q"
+            if GPIO.input(18) == True:
+                print "18 triggered" 
+                gFileName = "mov3.mp4"
+                return "q"
+            if GPIO.input(22) == True:
+                print "22 triggered" 
+                gFileName = "mov2.mp4"
+                return "q"
+            if GPIO.input(23) == True:
+                gFileName = "mov4.mp4"
+                print "23 triggered"
+                return "q"
+            if GPIO.input(24) == True:
+                gFileName = "mov5.mp4"
+                print "24 triggered" 
+                return "q"
+            '''
+            if gTriggerKey == 25:
+                gTriggerKey = 0
+                gFileName = "mov6.mp4"
+                print "25 triggered"
+                return "q"
+            
+        if GPIO.input(21) == True:
+                print "21 triggered" 
+                os.system("reboot")
 
 
 
@@ -243,6 +247,10 @@ def check_input (videodir,track):
             return False
 
 
+def cbTrigger25(pin):
+    print "25 interrupt trigger"
+    gTriggerKey = 25
+
 #Rsspberry board GPIO pins functions setting
 def set_gpio():
     GPIO.setmode(GPIO.BCM)
@@ -257,6 +265,9 @@ def set_gpio():
     GPIO.setup(27, GPIO.IN)
     GPIO.setup(4,  GPIO.IN)
     GPIO.setup(21,  GPIO.IN)
+
+    GPIO.add_event_detect(25, GPIO.BOTH)
+    GPIO.add_event_callback(25, cbTrigger25)
 # MAIN
 # change videodir to where you store your videos. Must be a path from root
 videodir ="/winston/cinema/"
@@ -269,8 +280,10 @@ print "******* Welcome to pyomxplayer *******"
 check_runnable()
 
 #configure raspberry gpio pin as input
+gTriggerKey = 0
 set_gpio()
 gLabel = False
+
 # ask where to send the sound
 #while True:
 #    print ("Output, hdmi or local")
