@@ -148,6 +148,30 @@ sub_main ()
 	myprintf ("^^^^^^^^^^^^^^^^^^^\n");
 }
 
+//This function works for cheching if omxplayer has been working,if it has been working the 
+//echo -n . > myfifo will cause omxplayer speedup, so it should be checked before omxplayer running. 
+int checkOmxRun(){
+        int status ;
+	int fd ;
+	char str[LENGTH];
+	int len = 0 ;
+	char killstr[30] ;
+	
+	status = system ("pgrep omxplayer.bin > system.dat");
+	fd = open ("system.dat", O_RDWR);
+
+	if (fd)
+	{
+		len = read (fd, str, LENGTH);
+	}
+	close(fd) ;
+   
+        if(len)
+           return 1;
+        else
+           return 0 ;
+}
+
 int insertMovie(){
 	int status ;
 	int fd ;
@@ -224,7 +248,7 @@ main ()
 		}	
 		myprintf ("I'm the child process. \n");
 		status = system ("omxplayer -o hdmi mov7.mp4 < myfifo &" );
-        status = system ("echo -n . > myfifo") ;
+		status = system ("echo -n . > myfifo") ;
 		sprintf(killstr, "kill %d", getpid()) ;
 		system(killstr) ; 
 		
@@ -249,7 +273,9 @@ main ()
 				{
 					myprintf ("I'm  0x17child process. \n");
 					status = system ("omxplayer -o hdmi mov1.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
 					exit (0);
@@ -264,7 +290,9 @@ main ()
 				{
 					myprintf ("I'm 0x18 child process. \n");
 					status = system ("omxplayer -o hdmi mov3.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
 					exit (0);
@@ -279,7 +307,9 @@ main ()
 				{
 					myprintf ("I'm 0x22 child process. \n");
 					status = system ("omxplayer -o hdmi mov2.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ; 
 					exit (0);
@@ -294,7 +324,9 @@ main ()
 				{
 					myprintf ("I'm 0x23 child process. \n");
 					status = system ("omxplayer -o hdmi mov4.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
 					exit (0);
@@ -309,7 +341,9 @@ main ()
 				{
 					myprintf ("I'm 0x24 child process. \n");
 					status = system ("omxplayer -o hdmi mov5.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}			
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
 					exit (0);
@@ -324,7 +358,9 @@ main ()
 				{
 					myprintf ("I'm 0x25 child process. \n");
 					status = system ("omxplayer -o hdmi mov6.mp4 < myfifo &");
-					status = system ("echo -n . > myfifo") ;
+					if(!checkOmxRun()){
+						status = system ("echo -n . > myfifo") ;
+					}
 					sprintf(killstr, "kill %d", getpid()) ;
 					system(killstr) ;
 					exit (0);
